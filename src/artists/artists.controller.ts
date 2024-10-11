@@ -18,7 +18,8 @@ import { FileInterceptor } from '@nestjs/platform-express';
 @Controller('artists')
 export class ArtistsController {
   constructor(
-    @InjectModel(Artist.name) private artistModel: Model<ArtistDocument>,
+    @InjectModel(Artist.name)
+    private artistModel: Model<ArtistDocument>,
   ) {}
 
   @Get()
