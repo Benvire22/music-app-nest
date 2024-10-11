@@ -40,10 +40,11 @@ export class TracksController {
       name: track.name,
       length: track.length,
       number: track.number,
+      isPublished: false,
     });
   }
 
-  @Delete()
+  @Delete(':id')
   async delete(@Param('id') id: string) {
     if (!mongoose.isValidObjectId(id)) {
       throw new NotFoundException(`Invalid track ID!`);
@@ -52,7 +53,7 @@ export class TracksController {
     const deletedTrack = await this.trackModel.findByIdAndDelete(id);
 
     if (!deletedTrack) {
-      throw new NotFoundException(`Invalid track ID!`);
+      throw new NotFoundException(`Track not found!`);
     }
 
     return { message: 'Track was deleted successfully!' };

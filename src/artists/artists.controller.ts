@@ -48,15 +48,12 @@ export class ArtistsController {
     @Body() artist: CreateArtistDto,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    try {
-      return await this.artistModel.create({
-        name: artist.name,
-        description: artist.description,
-        photo: file ? `images/${file.filename}` : null,
-      });
-    } catch (e) {
-      console.log(e);
-    }
+    return await this.artistModel.create({
+      name: artist.name,
+      description: artist.description,
+      photo: file ? `images/${file.filename}` : null,
+      isPublished: false,
+    });
   }
 
   @Delete(':id')

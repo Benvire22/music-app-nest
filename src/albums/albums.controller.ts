@@ -56,6 +56,7 @@ export class AlbumsController {
       name: album.name,
       releaseDate: album.releaseDate,
       image: file ? `/images/${file.filename}` : null,
+      isPublished: false,
     });
   }
 

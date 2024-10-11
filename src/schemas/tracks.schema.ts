@@ -21,6 +21,9 @@ export class Track {
 
   @Prop({ required: true })
   number: number;
+
+  @Prop({ required: true })
+  isPublished: boolean;
 }
 
 export const TrackSchema = SchemaFactory.createForClass(Track);

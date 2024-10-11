@@ -12,6 +12,9 @@ export class Artist {
 
   @Prop()
   photo: string;
+
+  @Prop({ required: true })
+  isPublished: boolean;
 }
 
 export const ArtistSchema = SchemaFactory.createForClass(Artist);
