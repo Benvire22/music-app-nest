@@ -8,7 +8,7 @@ export class PermitAuthGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<Request>();
-    const roles = ['admin', 'user'];
+    const roles = ['admin'];
 
     const user = request.user as UserDocument;
 

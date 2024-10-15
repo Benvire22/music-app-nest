@@ -1,12 +1,10 @@
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Post, Req, UseGuards } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from '../schemas/user.schema';
 import { Request } from 'express';
 import { AuthGuard } from '@nestjs/passport';
 import { RegisterUserDto } from './register-user.dto';
-import { PermitAuthGuard } from '../auth/permit-auth.guard';
-import { TokenAuthGuard } from '../auth/token-auth.guard';
 
 @Controller('users')
 export class UsersController {
@@ -14,11 +12,17 @@ export class UsersController {
 
   @Post()
   async registerUser(@Body() registerUserDto: RegisterUserDto): Promise<User> {
+    let role = 'user';
+
+    if (registerUserDto.role === 'admin') {
+      role = 'admin';
+    }
+
     const user = new this.userModel({
       email: registerUserDto.email,
       password: registerUserDto.password,
       displayName: registerUserDto.displayName,
-      role: 'user',
+      role,
     });
     user.generateToken();
 
@@ -31,10 +35,29 @@ export class UsersController {
     return req.user;
   }
 
-  @UseGuards(TokenAuthGuard, PermitAuthGuard)
-  @Get('secret')
-  async secret(@Req() req: Request) {
-    const user = req.user as UserDocument;
-    return { message: 'this is the secret message', email: user.email };
+  @Delete()
+  async logout(@Req() req: Request) {
+    const headerValue = req.get('Authorization');
+
+    if (!headerValue) {
+      return;
+    }
+
+    const [, token] = headerValue.split(' ');
+
+    if (!token) {
+      return;
+    }
+
+    const user = await this.userModel.findOne({ token });
+
+    if (!user) {
+      return;
+    }
+
+    user.generateToken();
+    await user.save();
+
+    return;
   }
 }

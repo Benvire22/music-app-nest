@@ -17,4 +17,7 @@ export class RegisterUserDto {
   password: string;
 
   displayName: string;
+
+  @IsNotEmpty()
+  role: string;
 }
