@@ -16,6 +16,7 @@ import mongoose, { Model } from 'mongoose';
 import { CreateArtistDto } from './create-artist.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { TokenAuthGuard } from '../auth/token-auth.guard';
+import { PermitAuthGuard } from '../auth/permit-auth.guard';
 
 @Controller('artists')
 export class ArtistsController {
@@ -59,6 +60,7 @@ export class ArtistsController {
     });
   }
 
+  @UseGuards(TokenAuthGuard, PermitAuthGuard)
   @Delete(':id')
   async delete(@Param('id') id: string) {
     if (!mongoose.isValidObjectId(id)) {

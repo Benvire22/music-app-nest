@@ -14,6 +14,7 @@ import mongoose, { Model } from 'mongoose';
 import { Track, TrackDocument } from '../schemas/tracks.schema';
 import { CreateTrackDto } from './create-track.dto';
 import { TokenAuthGuard } from '../auth/token-auth.guard';
+import { PermitAuthGuard } from '../auth/permit-auth.guard';
 
 @Controller('tracks')
 export class TracksController {
@@ -47,6 +48,7 @@ export class TracksController {
     });
   }
 
+  @UseGuards(TokenAuthGuard, PermitAuthGuard)
   @Delete(':id')
   async delete(@Param('id') id: string) {
     if (!mongoose.isValidObjectId(id)) {

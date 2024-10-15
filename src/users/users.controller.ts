@@ -4,8 +4,9 @@ import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from '../schemas/user.schema';
 import { Request } from 'express';
 import { AuthGuard } from '@nestjs/passport';
-import { TokenAuthGuard } from '../auth/token-auth.guard';
 import { RegisterUserDto } from './register-user.dto';
+import { PermitAuthGuard } from '../auth/permit-auth.guard';
+import { TokenAuthGuard } from '../auth/token-auth.guard';
 
 @Controller('users')
 export class UsersController {
@@ -30,7 +31,7 @@ export class UsersController {
     return req.user;
   }
 
-  @UseGuards(TokenAuthGuard)
+  @UseGuards(TokenAuthGuard, PermitAuthGuard)
   @Get('secret')
   async secret(@Req() req: Request) {
     const user = req.user as UserDocument;
