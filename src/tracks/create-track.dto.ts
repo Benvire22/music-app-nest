@@ -3,5 +3,4 @@ export class CreateTrackDto {
   name: string;
   length: string;
   number: string;
-  isPublished: boolean;
 }
